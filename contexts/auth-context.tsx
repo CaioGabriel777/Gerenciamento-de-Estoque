@@ -50,7 +50,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       id: String(Math.floor(Math.random() * 100000)),
       name: name || email.split("@")[0],
       email,
-      avatar: `https://avatars.dicebear.com/api/initials/${encodeURIComponent(name || email)}.svg`,
+      avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(name || email)}&background=random`,
       token: "fake-jwt-token",
     };
 

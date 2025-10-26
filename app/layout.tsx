@@ -1,9 +1,9 @@
+// app/layout.tsx
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { ProductsProvider } from "@/contexts/products-context";
-import { AppShell } from "@/components/app-shell"; 
 import { AuthProvider } from "@/contexts/auth-context";
 import { AuthWrapper } from "@/components/auth-wrapper";
 
@@ -28,8 +28,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR">
-      <body className="min-h-screen bg-background">
+    <html lang="pt-BR" suppressHydrationWarning>
+      <body className="min-h-screen bg-background" suppressHydrationWarning>
         <AuthProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <ProductsProvider>
