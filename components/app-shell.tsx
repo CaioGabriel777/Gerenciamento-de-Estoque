@@ -15,8 +15,9 @@ import {
   SidebarProvider,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
-import { Home, Package, PackagePlus, ChevronLeft, ChevronRight } from "lucide-react";
+import { Home, Package, PackagePlus, ChevronLeft, ChevronRight, User, Settings, LogOut } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { AvatarMenu } from "./avatar-menu";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -72,6 +73,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     <SidebarSeparator className={`my-2 transition-opacity duration-300 ${isExpanded ? "opacity-100" : "opacity-0"}`} />
 
                     <SidebarMenuItem>
+                      {isExpanded && (
+                        <SidebarGroupLabel className="transition-opacity duration-300">
+                          Produtos
+                        </SidebarGroupLabel>
+                      )}
                       <SidebarMenuButton asChild tooltip="Lista de Produtos">
                         <a href="/lista-de-produtos" className="flex items-center gap-3">
                           <Package className="h-5 w-5 flex-shrink-0" />
@@ -125,10 +131,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               </button>
 
               <div className="flex items-center gap-4">
-                <h1 className="text-xl font-semibold">Dashboard</h1>
+                <h1 className="text-xl font-semibold">Gestão de Estoque</h1>
               </div>
 
-              <ThemeToggle />
+              <div className="flex items-center gap-2">
+
+                <ThemeToggle />
+
+                <AvatarMenu/>
+                
+              </div>
             </div>
           </div>
 

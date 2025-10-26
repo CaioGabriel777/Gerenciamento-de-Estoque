@@ -1,7 +1,11 @@
+// O useContext serve pra compartilhar dados entre componentes 
+// sem precisar ficar passando props manualmente de pai pra filho, neto, bisneto…
+
 "use client"
 
 import { createContext, useContext, useEffect, useState } from "react"
 
+// Primeiro definimos o tipo dos dados
 type Product = {
   id: number
   title: string
@@ -15,12 +19,15 @@ type ProductsContextType = {
   setProducts: (p: Product[]) => void
 }
 
+// createContext cria a "caixinha global" onde os dados vão ser armazenados
 const ProductsContext = createContext<ProductsContextType>({
   products: [],
   loading: true,
   setProducts: () => {},
 })
 
+// o Provider envolve os componentes da aplicação 
+// e fornece os dados (products, loading e setProducts) pro resto do app.
 export function ProductsProvider({ children }: { children: React.ReactNode }) {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)

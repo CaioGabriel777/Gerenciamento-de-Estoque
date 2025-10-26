@@ -1,3 +1,4 @@
+// "use client" significa que esse componente renderiza no navegador
 "use client"
 
 import { useProducts } from "@/contexts/products-context"
@@ -16,25 +17,14 @@ import {
   ResponsiveContainer,
 } from "recharts"
 import { useEffect, useState } from "react";
-
-interface User {
-  id: number;
-  name: string;
-}
+import { DashboardCards } from "@/components/dashboard-cards";
+import { RequireAuth } from "@/components/require-auth";
+import { useAuth } from "@/contexts/auth-context";
 
 
 export default function HomePage() {
 
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    const UserData: User = {
-      id: 1,
-      name: "Caio Gabriel"
-    };
-    setUser(UserData);
-  }, []);
-
+  const { user } = useAuth();
   const { products, loading } = useProducts()
 
   if (loading) return <p>Carregando gráfico...</p>
@@ -62,8 +52,13 @@ export default function HomePage() {
   }
 
   return (
+    <RequireAuth>
     <div className="p-6">
       <h1 className="text-2xl mb-6">Bem vindo, {user?.name}</h1>
+
+      <h2 className="text-2xl font-semibold mb-6">Resumos</h2>
+      <DashboardCards/>
+
       <h2 className="text-2xl font-semibold mb-6">Média de Preços por Categoria</h2>
 
       <ChartContainer
@@ -89,5 +84,6 @@ export default function HomePage() {
         </ResponsiveContainer>
       </ChartContainer>
     </div>
+    </RequireAuth>
   )
 }
