@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -15,37 +15,74 @@ import {
   SidebarProvider,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
-import { Home, Package, PackagePlus, ChevronLeft, ChevronRight, User, Settings, LogOut } from "lucide-react";
+import { Home, Package, PackagePlus, ChevronLeft, ChevronRight, Menu, X } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { AvatarMenu } from "./avatar-menu";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Sidebar está expandida se não estiver colapsada OU se estiver em hover
-  const isExpanded = !collapsed || isHovering;
+  // Detectar se é mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+      if (window.innerWidth < 768) {
+        setCollapsed(true);
+      }
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Sidebar está expandida se não estiver colapsada OU se estiver em hover (apenas desktop)
+  const isExpanded = !collapsed || (!isMobile && isHovering);
 
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full relative">
+        
+        {/* OVERLAY para mobile */}
+        {isMobile && !collapsed && (
+          <div 
+            className="fixed inset-0 bg-black/50 z-40"
+            onClick={() => setCollapsed(true)}
+          />
+        )}
+
         {/* SIDEBAR */}
         <div
-          onMouseEnter={() => collapsed && setIsHovering(true)}
-          onMouseLeave={() => setIsHovering(false)}
-          className="relative"
+          onMouseEnter={() => !isMobile && collapsed && setIsHovering(true)}
+          onMouseLeave={() => !isMobile && setIsHovering(false)}
+          className={`${isMobile ? 'fixed left-0 top-0 h-full z-50' : 'relative'} transition-transform duration-300 ${
+            isMobile && collapsed ? '-translate-x-full' : 'translate-x-0'
+          }`}
         >
           <Sidebar 
             collapsible="none"
-            className={`transition-all duration-300 ${
-              isExpanded ? "w-64" : "w-16"
+            className={`transition-all duration-300 h-full ${
+              isMobile ? 'w-full' : (isExpanded ? 'w-64' : 'w-16')
             }`}
           >
             <SidebarHeader className={`p-4 transition-all duration-300 ${isExpanded ? "border-b" : ""}`}>
               {isExpanded ? (
-                <div className="flex items-center gap-2 transition-all duration-300">
-                  <Package className="h-6 w-6 flex-shrink-0" />
-                  <span className="font-semibold text-lg whitespace-nowrap">Meu Painel</span>
+                <div className="flex items-center justify-between gap-2 transition-all duration-300">
+                  <div className="flex items-center gap-2">
+                    <Package className="h-6 w-6 flex-shrink-0" />
+                    <span className="font-semibold text-lg whitespace-nowrap">Meu Painel</span>
+                  </div>
+                  {isMobile && (
+                    <button
+                      onClick={() => setCollapsed(true)}
+                      className="p-2 rounded-md hover:bg-muted transition-colors"
+                      aria-label="Fechar sidebar"
+                    >
+                      <X className="h-5 w-5" />
+                    </button>
+                  )}
                 </div>
               ) : (
                 <div className="h-8" />
@@ -63,7 +100,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   <SidebarMenu>
                     <SidebarMenuItem>
                       <SidebarMenuButton asChild tooltip="Home">
-                        <a href="/" className="flex items-center gap-3">
+                        <a 
+                          href="/" 
+                          className="flex items-center gap-3"
+                          onClick={() => isMobile && setCollapsed(true)}
+                        >
                           <Home className="h-5 w-5 flex-shrink-0" />
                           {isExpanded && <span className="transition-opacity duration-300">Home</span>}
                         </a>
@@ -79,7 +120,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                         </SidebarGroupLabel>
                       )}
                       <SidebarMenuButton asChild tooltip="Lista de Produtos">
-                        <a href="/lista-de-produtos" className="flex items-center gap-3">
+                        <a 
+                          href="/lista-de-produtos" 
+                          className="flex items-center gap-3"
+                          onClick={() => isMobile && setCollapsed(true)}
+                        >
                           <Package className="h-5 w-5 flex-shrink-0" />
                           {isExpanded && (
                             <span className="transition-opacity duration-300 whitespace-nowrap">
@@ -92,7 +137,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
                     <SidebarMenuItem>
                       <SidebarMenuButton asChild tooltip="Cadastro de Produtos">
-                        <a href="/cadastro-de-produtos" className="flex items-center gap-3">
+                        <a 
+                          href="/cadastro-de-produtos" 
+                          className="flex items-center gap-3"
+                          onClick={() => isMobile && setCollapsed(true)}
+                        >
                           <PackagePlus className="h-5 w-5 flex-shrink-0" />
                           {isExpanded && (
                             <span className="transition-opacity duration-300 whitespace-nowrap">
@@ -127,7 +176,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 className="p-2 rounded-md hover:bg-muted transition-colors"
                 aria-label={collapsed ? "Expandir sidebar" : "Colapsar sidebar"}
               >
-                {collapsed ? <ChevronRight className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
+                {collapsed ? (isMobile ? <Menu className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />) : <ChevronLeft className="h-5 w-5" />}
               </button>
 
               <div className="flex items-center gap-4">
@@ -135,11 +184,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               </div>
 
               <div className="flex items-center gap-2">
-
                 <ThemeToggle />
-
                 <AvatarMenu/>
-                
               </div>
             </div>
           </div>
