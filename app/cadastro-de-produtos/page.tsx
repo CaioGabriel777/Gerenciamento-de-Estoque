@@ -80,9 +80,9 @@ export default function CadastroDeProdutos() {
                             <SelectValue placeholder="Selecione a categoria" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="camisetas">Camisetas</SelectItem>
-                            <SelectItem value="calças">Calças</SelectItem>
-                            <SelectItem value="sapatos">Sapatos</SelectItem>
+                            <SelectItem value="camisetas">Roupas</SelectItem>
+                            <SelectItem value="calças">Eletrônicos</SelectItem>
+                            <SelectItem value="sapatos">Acessórios</SelectItem>
                         </SelectContent>
                         </Select>
                     </div>

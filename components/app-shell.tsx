@@ -15,7 +15,7 @@ import {
   SidebarProvider,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
-import { Home, Package, PackagePlus, ChevronLeft, ChevronRight, Menu, X } from "lucide-react";
+import { Home, Package, PackagePlus, ChevronLeft, ChevronRight, Menu, X, Building, Users } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { AvatarMenu } from "./avatar-menu";
 
@@ -150,6 +150,45 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                           )}
                         </a>
                       </SidebarMenuButton>
+                    </SidebarMenuItem>
+
+                    <SidebarMenuItem>
+                      {isExpanded && (
+                        <SidebarGroupLabel className="transition-opacity duration-300">
+                          Organização
+                        </SidebarGroupLabel>
+                      )}
+
+                      <SidebarMenuButton asChild tooltip="Minha Organização">
+                        <a 
+                          href="/organizacao"
+                          className="flex items-center gap-3"
+                          onClick={() => isMobile && setCollapsed(true)}
+                        >
+                          <Building className="h-5 w-5 flex-shrink-0" />
+                          {isExpanded && (
+                            <span className="transition-opacity duration-300 whitespace-nowrap">
+                              Minha Organização
+                            </span>
+                          )}
+                        </a>
+                      </SidebarMenuButton>
+
+                      <SidebarMenuButton asChild tooltip="Colaboradores">
+                        <a 
+                          href="/colaboradores"
+                          className="flex items-center gap-3"
+                          onClick={() => isMobile && setCollapsed(true)}
+                        >
+                          <Users className="h-5 w-5 flex-shrink-0" />
+                          {isExpanded && (
+                            <span className="transition-opacity duration-300 whitespace-nowrap">
+                              Colaboradores
+                            </span>
+                          )}
+                        </a>
+                      </SidebarMenuButton>
+
                     </SidebarMenuItem>
                   </SidebarMenu>
                 </SidebarGroupContent>

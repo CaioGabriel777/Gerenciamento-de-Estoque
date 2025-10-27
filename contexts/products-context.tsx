@@ -6,7 +6,7 @@
 import { createContext, useContext, useEffect, useState } from "react"
 
 // Primeiro definimos o tipo dos dados
-type Product = {
+export type Product = {
   id: number
   title: string
   price: number
