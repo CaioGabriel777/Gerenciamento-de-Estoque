@@ -2,12 +2,14 @@
 
 import { useAuth } from "@/contexts/auth-context";
 import { AppShell } from "@/components/app-shell";
-import LoginPage from "@/app/login/page";
+import LoginPage from "@/app/auth/login/page";
+import SignupPage from "@/app/auth/signup/page";
+import { usePathname } from "next/navigation";
 
 export function AuthWrapper({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth(); // ← adicione o loading aqui
+  const { user, loading } = useAuth();
+  const pathname = usePathname();
 
-  // Enquanto está carregando, mostra um spinner
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -19,11 +21,20 @@ export function AuthWrapper({ children }: { children: React.ReactNode }) {
     );
   }
 
-  if (!user) {
-    // não logado → mostra a página de login
+  // Se for rota pública, deixa passar
+  if (pathname === "/auth/login") {
     return <LoginPage />;
   }
 
-  // logado → mostra o painel normalmente
+  if (pathname === "/auth/signup") {
+    return <SignupPage />;
+  }
+
+  // Se não estiver logado, força login
+  if (!user) {
+    return <LoginPage />;
+  }
+
+  // Logado → mostra o painel
   return <AppShell>{children}</AppShell>;
 }

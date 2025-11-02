@@ -8,7 +8,7 @@ type User = {
   name: string;
   email: string;
   avatar?: string;
-  // token é só fake aqui
+  // token fake
   token?: string;
 };
 
@@ -16,6 +16,7 @@ type AuthContextType = {
   user: User | null;
   loading: boolean;
   signIn: (u: { name: string; email: string }) => Promise<void>;
+  signUp: (u: { name: string; email: string, password: string }) => Promise<void>;
   signOut: () => void;
 };
 
@@ -57,19 +58,40 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(fakeUser));
     setUser(fakeUser);
     setLoading(false);
-    // opcional: redireciona pro dashboard
+    // redireciona pro dashboard
     router.push("/");
   };
+
+  const signUp = async ({ name, email, password }: { name: string; email: string; password: string }) => {
+    setLoading(true);
+    await new Promise((r) => setTimeout(r, 700));
+
+    const newUser: User = {
+      id: String(Math.floor(Math.random() * 100000)),
+      name,
+      email,
+      avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`,
+      token: "fake-jwt-token",
+    };
+
+    // salva no localStorage apenas para simular “registro”
+    localStorage.setItem(`user_${email}`, JSON.stringify(newUser));
+
+    setLoading(false);
+    // depois de se cadastrar, manda pro login
+    router.push("/auth/login");
+  };
+
 
   const signOut = () => {
     localStorage.removeItem(STORAGE_KEY);
     setUser(null);
     // redireciona pra login
-    router.push("/login");
+    router.push("/auth/login");
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, loading, signIn, signUp, signOut, }}>
       {children}
     </AuthContext.Provider>
   );

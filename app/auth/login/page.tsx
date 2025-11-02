@@ -8,7 +8,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { Eye, EyeOff, Lock, User } from "lucide-react";
+import { Eye, EyeOff} from "lucide-react";
+import Link from "next/link";
 
 export default function LoginPage() {
   const { signIn, loading: authLoading } = useAuth();
@@ -25,7 +26,7 @@ export default function LoginPage() {
     setError(null);
 
     // validação mínima
-    if (!email || !name) {
+    if (!email) {
       setError("Informe nome e e-mail (senha é irrelevante no fake).");
       return;
     }
@@ -46,18 +47,13 @@ export default function LoginPage() {
         </CardHeader>
 
         <CardContent>
-          {error && (
-            <Alert className="mb-4" role="alert">
-              <AlertTitle>Erro</AlertTitle>
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-
+          
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
+            
+            {/* <div>
               <Label htmlFor="name" className="mb-4">Nome</Label>
               <Input id="name" value={name} onChange={(e) => setName(e.target.value)} />
-            </div>
+            </div> */}
 
             <div>
               <Label htmlFor="email" className="mb-4">E-mail</Label>
@@ -81,6 +77,17 @@ export default function LoginPage() {
               </div>
               <a href="#" className="text-sm underline">Esqueci a senha</a>
             </div>
+
+            <div className="flex items-center justify-center">
+              <Link href="/auth/signup" className="text-sm underline">Não tem conta? Cadastre-se</Link>
+            </div>
+
+            {error && (
+              <Alert className="mb-4 border-red-500 text-red-200" role="alert">
+                <AlertTitle>Erro</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
 
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Entrando..." : "Entrar"}

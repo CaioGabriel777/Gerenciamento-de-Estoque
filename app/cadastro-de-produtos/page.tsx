@@ -50,7 +50,7 @@ export default function CadastroDeProdutos() {
             <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4" >
                     <div>
-                        <Label htmlFor="title" className="mb-2">Título</Label>
+                        <Label htmlFor="title" className="mb-4">Título</Label>
                         <Input
                         id="title"
                         value={title}
@@ -61,7 +61,7 @@ export default function CadastroDeProdutos() {
                     </div>
 
                     <div>
-                        <Label htmlFor="price" className="mb-2">Preço</Label>
+                        <Label htmlFor="price" className="mb-4">Preço</Label>
                         <Input
                         id="price"
                         type="number"
@@ -74,7 +74,7 @@ export default function CadastroDeProdutos() {
                     </div>
 
                     <div>
-                        <Label className="mb-2">Categoria</Label>
+                        <Label className="mb-4">Categoria</Label>
                         <Select onValueChange={setCategory}>
                         <SelectTrigger>
                             <SelectValue placeholder="Selecione a categoria" />
@@ -88,7 +88,7 @@ export default function CadastroDeProdutos() {
                     </div>
 
                     <div>
-                        <Label htmlFor="description" className="mb-2">Descrição</Label>
+                        <Label htmlFor="description" className="mb-4">Descrição</Label>
                         <Textarea
                         id="description"
                         value={description}
